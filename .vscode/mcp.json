@@ -1,0 +1,14 @@
+{
+  "servers": {
+    "Omnisend API": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["src/index.js"],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "OMNISEND_API_KEY": "your_api_key_here",
+        "OMNISEND_API_URL": "https://api.omnisend.com/v5"
+      }
+    }
+  }
+} 
