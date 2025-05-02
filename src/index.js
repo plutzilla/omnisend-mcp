@@ -9,257 +9,243 @@ import * as contactsTools from './tools/contacts.js';
 import * as productsTools from './tools/products.js';
 import * as eventsTools from './tools/events.js';
 
-// Main function
-async function main() {
-  // Create MCP server
-  const server = new McpServer(
-    {
-      name: "Omnisend API",
-      version: "1.0.0",
-    },
-    {
-      capabilities: {
-        tools: { listChanged: false },
-      },
-    }
-  );
-
-  // Register contacts tools
-  server.tool(
-    "listContacts",
-    z.object({
-      limit: z.number().optional().describe("Maximum number of contacts to return"),
-      offset: z.number().optional().describe("Skip first N results")
-    }),
-    async ({ limit, offset }) => {
-      try {
-        const result = await contactsTools.listContacts({ limit, offset });
-        return {
-          content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
-        };
-      } catch (error) {
-        console.error(`Error executing listContacts: ${error.message}`);
-        return {
-          content: [{ type: "text", text: `Error: ${error.message}` }],
-          isError: true
-        };
-      }
-    }
-  );
-
-  server.tool(
-    "createContact",
-    z.object({
-      contactData: z.object({}).passthrough().describe("Contact data")
-    }),
-    async ({ contactData }) => {
-      try {
-        const result = await contactsTools.createOrUpdateContact(contactData);
-        return {
-          content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
-        };
-      } catch (error) {
-        console.error(`Error executing createContact: ${error.message}`);
-        return {
-          content: [{ type: "text", text: `Error: ${error.message}` }],
-          isError: true
-        };
-      }
-    }
-  );
-
-  server.tool(
-    "getContact",
-    z.object({
-      contactId: z.string().describe("Contact ID")
-    }),
-    async ({ contactId }) => {
-      try {
-        const result = await contactsTools.getContact(contactId);
-        return {
-          content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
-        };
-      } catch (error) {
-        console.error(`Error executing getContact: ${error.message}`);
-        return {
-          content: [{ type: "text", text: `Error: ${error.message}` }],
-          isError: true
-        };
-      }
-    }
-  );
-
-  server.tool(
-    "updateContact",
-    z.object({
-      contactId: z.string().describe("Contact ID"),
-      contactData: z.object({}).passthrough().describe("Contact data")
-    }),
-    async ({ contactId, contactData }) => {
-      try {
-        const result = await contactsTools.updateContact(contactId, contactData);
-        return {
-          content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
-        };
-      } catch (error) {
-        console.error(`Error executing updateContact: ${error.message}`);
-        return {
-          content: [{ type: "text", text: `Error: ${error.message}` }],
-          isError: true
-        };
-      }
-    }
-  );
-
-  // Register products tools
-  server.tool(
-    "listProducts",
-    z.object({
-      limit: z.number().optional().describe("Maximum number of products to return"),
-      offset: z.number().optional().describe("Skip first N results")
-    }),
-    async ({ limit, offset }) => {
-      try {
-        const result = await productsTools.listProducts({ limit, offset });
-        return {
-          content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
-        };
-      } catch (error) {
-        console.error(`Error executing listProducts: ${error.message}`);
-        return {
-          content: [{ type: "text", text: `Error: ${error.message}` }],
-          isError: true
-        };
-      }
-    }
-  );
-
-  server.tool(
-    "createProduct",
-    z.object({
-      productData: z.object({}).passthrough().describe("Product data")
-    }),
-    async ({ productData }) => {
-      try {
-        const result = await productsTools.createProduct(productData);
-        return {
-          content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
-        };
-      } catch (error) {
-        console.error(`Error executing createProduct: ${error.message}`);
-        return {
-          content: [{ type: "text", text: `Error: ${error.message}` }],
-          isError: true
-        };
-      }
-    }
-  );
-
-  server.tool(
-    "getProduct",
-    z.object({
-      productId: z.string().describe("Product ID")
-    }),
-    async ({ productId }) => {
-      try {
-        const result = await productsTools.getProduct(productId);
-        return {
-          content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
-        };
-      } catch (error) {
-        console.error(`Error executing getProduct: ${error.message}`);
-        return {
-          content: [{ type: "text", text: `Error: ${error.message}` }],
-          isError: true
-        };
-      }
-    }
-  );
-
-  server.tool(
-    "replaceProduct",
-    z.object({
-      productId: z.string().describe("Product ID"),
-      productData: z.object({}).passthrough().describe("Product data")
-    }),
-    async ({ productId, productData }) => {
-      try {
-        const result = await productsTools.replaceProduct(productId, productData);
-        return {
-          content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
-        };
-      } catch (error) {
-        console.error(`Error executing replaceProduct: ${error.message}`);
-        return {
-          content: [{ type: "text", text: `Error: ${error.message}` }],
-          isError: true
-        };
-      }
-    }
-  );
-
-  server.tool(
-    "deleteProduct",
-    z.object({
-      productId: z.string().describe("Product ID")
-    }),
-    async ({ productId }) => {
-      try {
-        const result = await productsTools.deleteProduct(productId);
-        return {
-          content: [{ type: "text", text: result ? "Product successfully deleted" : "Product was not deleted" }]
-        };
-      } catch (error) {
-        console.error(`Error executing deleteProduct: ${error.message}`);
-        return {
-          content: [{ type: "text", text: `Error: ${error.message}` }],
-          isError: true
-        };
-      }
-    }
-  );
-
-  // Register events tool
-  server.tool(
-    "sendEvent",
-    z.object({
-      eventData: z.object({
-        eventName: z.string().describe("Event name"),
-        contact: z.object({}).passthrough().describe("Contact information"),
-        properties: z.object({}).passthrough().optional().describe("Additional event properties"),
-        eventTime: z.string().optional().describe("Event time in RFC3339 format"),
-        eventVersion: z.string().optional().describe("Event version")
-      }).describe("Event data")
-    }),
-    async ({ eventData }) => {
-      try {
-        const result = await eventsTools.sendEvent(eventData);
-        return {
-          content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
-        };
-      } catch (error) {
-        console.error(`Error executing sendEvent: ${error.message}`);
-        return {
-          content: [{ type: "text", text: `Error: ${error.message}` }],
-          isError: true
-        };
-      }
-    }
-  );
-
-  // Connect server via stdio transport
-  const transport = new StdioServerTransport();
-  try {
-    await server.connect(transport);
-    console.error("Omnisend MCP server started and connected via stdio.");
-  } catch (error) {
-    console.error("Failed to connect server:", error);
-    process.exit(1);
+// Create MCP server
+const server = new McpServer(
+  {
+    name: "Omnisend API",
+    version: "1.0.0",
   }
-}
+);
+server.tool("add",
+  { a: z.number(), b: z.number() },
+  async ({ a, b }) => ({
+    content: [{ type: "text", text: String(a + b) }]
+  })
+);
 
-// Run main function
-main().catch((error) => {
-  console.error("Unhandled error during server startup:", error);
-  process.exit(1);
-}); 
+// Register contacts tools
+server.tool(
+  "listContacts",
+  z.object({
+    limit: z.number().optional().describe("Maximum number of contacts to return"),
+    offset: z.number().optional().describe("Skip first N results")
+  }),
+  async ({ limit, offset }) => {
+    try {
+      console.log('listContacts', limit, offset)
+      const result = await contactsTools.listContacts({ limit, offset });
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    } catch (error) {
+      console.error(`Error executing listContacts: ${error.message}`);
+      return {
+        content: [{ type: "text", text: `Error: ${error.message}` }],
+        isError: true
+      };
+    }
+  }
+);
+
+server.tool(
+  "createContact",
+  z.object({
+    contactData: z.object({}).passthrough().describe("Contact data")
+  }),
+  async ({ contactData }) => {
+    try {
+      const result = await contactsTools.createOrUpdateContact(contactData);
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    } catch (error) {
+      console.error(`Error executing createContact: ${error.message}`);
+      return {
+        content: [{ type: "text", text: `Error: ${error.message}` }],
+        isError: true
+      };
+    }
+  }
+);
+
+server.tool(
+  "getContact",
+  z.object({
+    contactId: z.string().describe("Contact ID")
+  }),
+  async ({ contactId }) => {
+    try {
+      const result = await contactsTools.getContact(contactId);
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    } catch (error) {
+      console.error(`Error executing getContact: ${error.message}`);
+      return {
+        content: [{ type: "text", text: `Error: ${error.message}` }],
+        isError: true
+      };
+    }
+  }
+);
+
+server.tool(
+  "updateContact",
+  z.object({
+    contactId: z.string().describe("Contact ID"),
+    contactData: z.object({}).passthrough().describe("Contact data")
+  }),
+  async ({ contactId, contactData }) => {
+    try {
+      const result = await contactsTools.updateContact(contactId, contactData);
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    } catch (error) {
+      console.error(`Error executing updateContact: ${error.message}`);
+      return {
+        content: [{ type: "text", text: `Error: ${error.message}` }],
+        isError: true
+      };
+    }
+  }
+);
+
+// Register products tools
+server.tool(
+  "listProducts",
+  z.object({
+    limit: z.number().optional().describe("Maximum number of products to return"),
+    offset: z.number().optional().describe("Skip first N results")
+  }),
+  async ({ limit, offset }) => {
+    try {
+      const result = await productsTools.listProducts({ limit, offset });
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    } catch (error) {
+      console.error(`Error executing listProducts: ${error.message}`);
+      return {
+        content: [{ type: "text", text: `Error: ${error.message}` }],
+        isError: true
+      };
+    }
+  }
+);
+
+server.tool(
+  "createProduct",
+  z.object({
+    productData: z.object({}).passthrough().describe("Product data")
+  }),
+  async ({ productData }) => {
+    try {
+      const result = await productsTools.createProduct(productData);
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    } catch (error) {
+      console.error(`Error executing createProduct: ${error.message}`);
+      return {
+        content: [{ type: "text", text: `Error: ${error.message}` }],
+        isError: true
+      };
+    }
+  }
+);
+
+server.tool(
+  "getProduct",
+  z.object({
+    productId: z.string().describe("Product ID")
+  }),
+  async ({ productId }) => {
+    try {
+      const result = await productsTools.getProduct(productId);
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    } catch (error) {
+      console.error(`Error executing getProduct: ${error.message}`);
+      return {
+        content: [{ type: "text", text: `Error: ${error.message}` }],
+        isError: true
+      };
+    }
+  }
+);
+
+server.tool(
+  "replaceProduct",
+  z.object({
+    productId: z.string().describe("Product ID"),
+    productData: z.object({}).passthrough().describe("Product data")
+  }),
+  async ({ productId, productData }) => {
+    try {
+      const result = await productsTools.replaceProduct(productId, productData);
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    } catch (error) {
+      console.error(`Error executing replaceProduct: ${error.message}`);
+      return {
+        content: [{ type: "text", text: `Error: ${error.message}` }],
+        isError: true
+      };
+    }
+  }
+);
+
+server.tool(
+  "deleteProduct",
+  z.object({
+    productId: z.string().describe("Product ID")
+  }),
+  async ({ productId }) => {
+    try {
+      const result = await productsTools.deleteProduct(productId);
+      return {
+        content: [{ type: "text", text: result ? "Product successfully deleted" : "Product was not deleted" }]
+      };
+    } catch (error) {
+      console.error(`Error executing deleteProduct: ${error.message}`);
+      return {
+        content: [{ type: "text", text: `Error: ${error.message}` }],
+        isError: true
+      };
+    }
+  }
+);
+
+// Register events tool
+server.tool(
+  "sendEvent",
+  z.object({
+    eventData: z.object({
+      eventName: z.string().describe("Event name"),
+      contact: z.object({}).passthrough().describe("Contact information"),
+      properties: z.object({}).passthrough().optional().describe("Additional event properties"),
+      eventTime: z.string().optional().describe("Event time in RFC3339 format"),
+      eventVersion: z.string().optional().describe("Event version")
+    }).describe("Event data")
+  }),
+  async ({ eventData }) => {
+    try {
+      const result = await eventsTools.sendEvent(eventData);
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    } catch (error) {
+      console.error(`Error executing sendEvent: ${error.message}`);
+      return {
+        content: [{ type: "text", text: `Error: ${error.message}` }],
+        isError: true
+      };
+    }
+  }
+);
+  // Start receiving messages on stdin and sending messages on stdout
+const transport = new StdioServerTransport();
+await server.connect(transport);
