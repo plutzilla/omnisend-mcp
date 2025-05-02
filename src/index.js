@@ -88,10 +88,10 @@ server.tool(
 
 server.tool(
   "updateContact",
-  "Update an existing contact's information. Can modify subscription status, personal details, and custom properties.",
+  "Update an existing contact's information. IMPORTANT: You must first get the contact using getContact and preserve the returned structure when updating. The update request requires the same structure as returned by the GET method, with only your desired changes applied.",
   {
     contactId: z.string().describe("Contact ID"),
-    contactData: z.object({}).passthrough().describe("Contact data")
+    contactData: z.object({}).passthrough().describe("Contact data in the same structure as returned by getContact")
   },
   async ({ contactId, contactData }) => {
     try {
@@ -179,10 +179,10 @@ server.tool(
 
 server.tool(
   "replaceProduct",
-  "Replace an existing product with new data. This completely overwrites the product information rather than updating specific fields.",
+  "Replace an existing product with new data. IMPORTANT: You must first get the product using getProduct and preserve the returned structure when replacing. The replace request requires the same structure as returned by the GET method, with only your desired changes applied.",
   {
     productId: z.string().describe("Product ID"),
-    productData: z.object({}).passthrough().describe("Product data")
+    productData: z.object({}).passthrough().describe("Product data in the same structure as returned by getProduct")
   },
   async ({ productId, productData }) => {
     try {
