@@ -2,6 +2,10 @@
 
 A Model Context Protocol (MCP) server that integrates with Omnisend API V5.
 
+<a href="https://glama.ai/mcp/servers/@plutzilla/omnisend-mcp">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@plutzilla/omnisend-mcp/badge" alt="Omnisend Server MCP server" />
+</a>
+
 ## Features
 
 - Contact management (list, create, get, update)
@@ -110,4 +114,4 @@ const result = await client.executeTool("listContacts", { limit: 10 });
 
 ## API Documentation
 
-For more information about the Omnisend API, see the [official documentation](https://api-docs.omnisend.com/). 
+For more information about the Omnisend API, see the [official documentation](https://api-docs.omnisend.com/).
