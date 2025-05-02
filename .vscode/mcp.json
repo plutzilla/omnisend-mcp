@@ -3,10 +3,9 @@
     "Omnisend API": {
       "type": "stdio",
       "command": "node",
-      "args": ["src/index.js"],
-      "cwd": "${workspaceFolder}",
+      "args": ["/home/paulius/code/omnisend-mcp/src/index.js"],
       "env": {
-        "OMNISEND_API_KEY": "your_api_key_here",
+        "OMNISEND_API_KEY": "<YOUR API KEY>",
         "OMNISEND_API_URL": "https://api.omnisend.com/v5"
       }
     }

@@ -1,7 +1,7 @@
 {
   "name": "omnisend-mcp",
   "version": "1.0.0",
-  "description": "MCP serveris Omnisend API integracijai",
+  "description": "MCP server for Omnisend API integration",
   "main": "src/index.js",
   "type": "module",
   "scripts": {

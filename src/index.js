@@ -20,14 +20,15 @@ const server = new McpServer(
 // Register contacts tools
 server.tool(
   "listContacts",
+  "Retrieve a list of contacts from Omnisend. Each contact can be identified by multiple identifiers (email, phone) with corresponding channels.",
   {
     limit: z.number().optional().describe("Maximum number of contacts to return"),
-    offset: z.number().optional().describe("Skip first N results")
+    offset: z.number().optional().describe("Skip first N results"),
+    status: z.enum(["subscribed", "unsubscribed", "nonSubscribed"]).optional().describe("Filter contacts by subscription status")
   },
-  async ({ limit, offset }) => {
+  async ({ limit, offset, status }) => {
     try {
-      console.log('listContacts', limit, offset)
-      const result = await contactsTools.listContacts({ limit, offset });
+      const result = await contactsTools.listContacts({ limit, offset, status });
       return {
         content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
       };
@@ -43,6 +44,7 @@ server.tool(
 
 server.tool(
   "createContact",
+  "Create or update a contact in Omnisend. Contact data can include identifiers (email, phone), personal information, subscription status, and custom properties.",
   {
     contactData: z.object({}).passthrough().describe("Contact data")
   },
@@ -64,6 +66,7 @@ server.tool(
 
 server.tool(
   "getContact",
+  "Retrieve detailed information about a specific contact by their unique identifier.",
   {
     contactId: z.string().describe("Contact ID")
   },
@@ -85,6 +88,7 @@ server.tool(
 
 server.tool(
   "updateContact",
+  "Update an existing contact's information. Can modify subscription status, personal details, and custom properties.",
   {
     contactId: z.string().describe("Contact ID"),
     contactData: z.object({}).passthrough().describe("Contact data")
@@ -108,6 +112,7 @@ server.tool(
 // Register products tools
 server.tool(
   "listProducts",
+  "Retrieve a list of products from the Omnisend catalog with pagination support.",
   {
     limit: z.number().optional().describe("Maximum number of products to return"),
     offset: z.number().optional().describe("Skip first N results")
@@ -130,6 +135,7 @@ server.tool(
 
 server.tool(
   "createProduct",
+  "Create a new product in the Omnisend catalog. Product data can include details like title, description, variants, images, price, and more.",
   {
     productData: z.object({}).passthrough().describe("Product data")
   },
@@ -151,6 +157,7 @@ server.tool(
 
 server.tool(
   "getProduct",
+  "Retrieve detailed information about a specific product by its unique identifier.",
   {
     productId: z.string().describe("Product ID")
   },
@@ -172,6 +179,7 @@ server.tool(
 
 server.tool(
   "replaceProduct",
+  "Replace an existing product with new data. This completely overwrites the product information rather than updating specific fields.",
   {
     productId: z.string().describe("Product ID"),
     productData: z.object({}).passthrough().describe("Product data")
@@ -194,6 +202,7 @@ server.tool(
 
 server.tool(
   "deleteProduct",
+  "Remove a product from the Omnisend catalog by its unique identifier.",
   {
     productId: z.string().describe("Product ID")
   },
@@ -216,6 +225,7 @@ server.tool(
 // Register events tool
 server.tool(
   "sendEvent",
+  "Send a customer event to Omnisend. Events are used to track customer behavior and can trigger automations. Can be custom events or predefined system events.",
   {
     eventData: z.object({
       eventName: z.string().describe("Event name"),
