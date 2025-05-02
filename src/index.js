@@ -16,20 +16,14 @@ const server = new McpServer(
     version: "1.0.0",
   }
 );
-server.tool("add",
-  { a: z.number(), b: z.number() },
-  async ({ a, b }) => ({
-    content: [{ type: "text", text: String(a + b) }]
-  })
-);
 
 // Register contacts tools
 server.tool(
   "listContacts",
-  z.object({
+  {
     limit: z.number().optional().describe("Maximum number of contacts to return"),
     offset: z.number().optional().describe("Skip first N results")
-  }),
+  },
   async ({ limit, offset }) => {
     try {
       console.log('listContacts', limit, offset)
@@ -49,9 +43,9 @@ server.tool(
 
 server.tool(
   "createContact",
-  z.object({
+  {
     contactData: z.object({}).passthrough().describe("Contact data")
-  }),
+  },
   async ({ contactData }) => {
     try {
       const result = await contactsTools.createOrUpdateContact(contactData);
@@ -70,9 +64,9 @@ server.tool(
 
 server.tool(
   "getContact",
-  z.object({
+  {
     contactId: z.string().describe("Contact ID")
-  }),
+  },
   async ({ contactId }) => {
     try {
       const result = await contactsTools.getContact(contactId);
@@ -91,10 +85,10 @@ server.tool(
 
 server.tool(
   "updateContact",
-  z.object({
+  {
     contactId: z.string().describe("Contact ID"),
     contactData: z.object({}).passthrough().describe("Contact data")
-  }),
+  },
   async ({ contactId, contactData }) => {
     try {
       const result = await contactsTools.updateContact(contactId, contactData);
@@ -114,10 +108,10 @@ server.tool(
 // Register products tools
 server.tool(
   "listProducts",
-  z.object({
+  {
     limit: z.number().optional().describe("Maximum number of products to return"),
     offset: z.number().optional().describe("Skip first N results")
-  }),
+  },
   async ({ limit, offset }) => {
     try {
       const result = await productsTools.listProducts({ limit, offset });
@@ -136,9 +130,9 @@ server.tool(
 
 server.tool(
   "createProduct",
-  z.object({
+  {
     productData: z.object({}).passthrough().describe("Product data")
-  }),
+  },
   async ({ productData }) => {
     try {
       const result = await productsTools.createProduct(productData);
@@ -157,9 +151,9 @@ server.tool(
 
 server.tool(
   "getProduct",
-  z.object({
+  {
     productId: z.string().describe("Product ID")
-  }),
+  },
   async ({ productId }) => {
     try {
       const result = await productsTools.getProduct(productId);
@@ -178,10 +172,10 @@ server.tool(
 
 server.tool(
   "replaceProduct",
-  z.object({
+  {
     productId: z.string().describe("Product ID"),
     productData: z.object({}).passthrough().describe("Product data")
-  }),
+  },
   async ({ productId, productData }) => {
     try {
       const result = await productsTools.replaceProduct(productId, productData);
@@ -200,9 +194,9 @@ server.tool(
 
 server.tool(
   "deleteProduct",
-  z.object({
+  {
     productId: z.string().describe("Product ID")
-  }),
+  },
   async ({ productId }) => {
     try {
       const result = await productsTools.deleteProduct(productId);
@@ -222,7 +216,7 @@ server.tool(
 // Register events tool
 server.tool(
   "sendEvent",
-  z.object({
+  {
     eventData: z.object({
       eventName: z.string().describe("Event name"),
       contact: z.object({}).passthrough().describe("Contact information"),
@@ -230,7 +224,7 @@ server.tool(
       eventTime: z.string().optional().describe("Event time in RFC3339 format"),
       eventVersion: z.string().optional().describe("Event version")
     }).describe("Event data")
-  }),
+  },
   async ({ eventData }) => {
     try {
       const result = await eventsTools.sendEvent(eventData);
