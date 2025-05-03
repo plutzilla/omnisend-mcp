@@ -8,6 +8,7 @@ import { z } from 'zod';
 import * as contactsTools from './tools/contacts.js';
 import * as productsTools from './tools/products.js';
 import * as eventsTools from './tools/events.js';
+import * as categoriesTools from './tools/categories.js';
 
 // Create MCP server
 const server = new McpServer(
@@ -16,6 +17,70 @@ const server = new McpServer(
     version: "1.0.0",
   }
 );
+
+// Define MCP resources
+server.resource('Contact', {
+  description: 'Represents a contact in Omnisend. Each contact can be identified by multiple identifiers (email, phone) with corresponding channels.',
+  fields: {
+    contactID: { type: 'string', description: 'Unique identifier of the contact' },
+    email: { type: 'string', description: 'Email address of the contact' },
+    phone: { type: 'string', description: 'Phone number of the contact' },
+    firstName: { type: 'string', description: 'First name of the contact' },
+    lastName: { type: 'string', description: 'Last name of the contact' },
+    status: { type: 'string', description: 'Subscription status: subscribed, unsubscribed, nonSubscribed' },
+    tags: { type: 'array', description: 'Tags associated with the contact' },
+    identifiers: { type: 'array', description: 'Identifiers for the contact (email, phone)' },
+    createdAt: { type: 'string', description: 'Date when the contact was created' },
+    updatedAt: { type: 'string', description: 'Date when the contact was last updated' }
+  }
+});
+
+server.resource('Product', {
+  description: 'Represents a product in the Omnisend catalog.',
+  fields: {
+    productID: { type: 'string', description: 'Unique identifier of the product' },
+    title: { type: 'string', description: 'Product title' },
+    status: { type: 'string', description: 'Product status: draft, active, archived' },
+    description: { type: 'string', description: 'Product description' },
+    currency: { type: 'string', description: 'Currency code for product price' },
+    price: { type: 'number', description: 'Product price' },
+    oldPrice: { type: 'number', description: 'Old product price (before discount)' },
+    productUrl: { type: 'string', description: 'URL to the product page' },
+    imageUrl: { type: 'string', description: 'URL to the product image' },
+    vendor: { type: 'string', description: 'Product vendor/brand' },
+    variants: { type: 'array', description: 'Product variants with different sizes, colors, etc.' },
+    createdAt: { type: 'string', description: 'Date when the product was created' },
+    updatedAt: { type: 'string', description: 'Date when the product was last updated' }
+  }
+});
+
+server.resource('Event', {
+  description: 'Represents a customer event in Omnisend.',
+  fields: {
+    eventID: { type: 'string', description: 'Unique identifier of the event' },
+    eventName: { type: 'string', description: 'Name of the event (e.g., "placed order", "viewed product")' },
+    email: { type: 'string', description: 'Email address of the contact who triggered the event' },
+    phone: { type: 'string', description: 'Phone number of the contact who triggered the event' },
+    contactID: { type: 'string', description: 'ID of the contact who triggered the event' },
+    contact: { type: 'object', description: 'Contact information' },
+    properties: { type: 'object', description: 'Additional event properties' },
+    createdAt: { type: 'string', description: 'Date when the event occurred' }
+  }
+});
+
+server.resource('ProductCategory', {
+  description: 'Represents a product category in Omnisend.',
+  fields: {
+    categoryID: { type: 'string', description: 'Unique identifier of the category' },
+    title: { type: 'string', description: 'Category title' },
+    handle: { type: 'string', description: 'Category handle/slug' },
+    description: { type: 'string', description: 'Category description' },
+    imageUrl: { type: 'string', description: 'URL to the category image' },
+    categoryUrl: { type: 'string', description: 'URL to the category page' },
+    createdAt: { type: 'string', description: 'Date when the category was created' },
+    updatedAt: { type: 'string', description: 'Date when the category was last updated' }
+  }
+});
 
 // Add a simple ping tool to check if the server is working
 server.tool(
@@ -42,7 +107,15 @@ server.tool(
     try {
       const result = await contactsTools.listContacts({ limit, offset, status });
       return {
-        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+        content: [{ 
+          type: "text", 
+          text: JSON.stringify(result, null, 2)
+        }],
+        resources: result.contacts?.map(contact => ({
+          type: 'Contact',
+          id: contact.contactID,
+          data: contact
+        })) || []
       };
     } catch (error) {
       console.error(`Error executing listContacts: ${error.message}`);
@@ -64,7 +137,12 @@ server.tool(
     try {
       const result = await contactsTools.createOrUpdateContact(contactData);
       return {
-        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        resources: [{
+          type: 'Contact',
+          id: result.contactID,
+          data: result
+        }]
       };
     } catch (error) {
       console.error(`Error executing createContact: ${error.message}`);
@@ -86,7 +164,12 @@ server.tool(
     try {
       const result = await contactsTools.getContact(contactId);
       return {
-        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        resources: [{
+          type: 'Contact',
+          id: result.contactID,
+          data: result
+        }]
       };
     } catch (error) {
       console.error(`Error executing getContact: ${error.message}`);
@@ -109,7 +192,12 @@ server.tool(
     try {
       const result = await contactsTools.updateContact(contactId, contactData);
       return {
-        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        resources: [{
+          type: 'Contact',
+          id: result.contactID,
+          data: result
+        }]
       };
     } catch (error) {
       console.error(`Error executing updateContact: ${error.message}`);
@@ -133,7 +221,12 @@ server.tool(
     try {
       const result = await productsTools.listProducts({ limit, offset });
       return {
-        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        resources: result.products?.map(product => ({
+          type: 'Product',
+          id: product.productID,
+          data: product
+        })) || []
       };
     } catch (error) {
       console.error(`Error executing listProducts: ${error.message}`);
@@ -155,7 +248,12 @@ server.tool(
     try {
       const result = await productsTools.createProduct(productData);
       return {
-        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        resources: [{
+          type: 'Product',
+          id: result.productID,
+          data: result
+        }]
       };
     } catch (error) {
       console.error(`Error executing createProduct: ${error.message}`);
@@ -177,7 +275,12 @@ server.tool(
     try {
       const result = await productsTools.getProduct(productId);
       return {
-        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        resources: [{
+          type: 'Product',
+          id: result.productID,
+          data: result
+        }]
       };
     } catch (error) {
       console.error(`Error executing getProduct: ${error.message}`);
@@ -200,7 +303,12 @@ server.tool(
     try {
       const result = await productsTools.replaceProduct(productId, productData);
       return {
-        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        resources: [{
+          type: 'Product',
+          id: result.productID,
+          data: result
+        }]
       };
     } catch (error) {
       console.error(`Error executing replaceProduct: ${error.message}`);
@@ -251,7 +359,12 @@ server.tool(
     try {
       const result = await eventsTools.sendEvent(eventData);
       return {
-        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        resources: [{
+          type: 'Event',
+          id: result.eventID,
+          data: result
+        }]
       };
     } catch (error) {
       console.error(`Error executing sendEvent: ${error.message}`);
@@ -262,6 +375,140 @@ server.tool(
     }
   }
 );
-  // Start receiving messages on stdin and sending messages on stdout
+
+// Register product categories tools
+server.tool(
+  "listCategories",
+  "Retrieve a list of product categories from the Omnisend catalog with pagination support.",
+  {
+    limit: z.number().optional().describe("Maximum number of categories to return"),
+    offset: z.number().optional().describe("Skip first N results")
+  },
+  async ({ limit, offset }) => {
+    try {
+      const result = await categoriesTools.listCategories({ limit, offset });
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        resources: result.categories?.map(category => ({
+          type: 'ProductCategory',
+          id: category.categoryID,
+          data: category
+        })) || []
+      };
+    } catch (error) {
+      console.error(`Error executing listCategories: ${error.message}`);
+      return {
+        content: [{ type: "text", text: `Error: ${error.message}` }],
+        isError: true
+      };
+    }
+  }
+);
+
+server.tool(
+  "createCategory",
+  "Create a new product category in the Omnisend catalog. Category data can include title, description, image, and URL.",
+  {
+    categoryData: z.object({}).passthrough().describe("Product category data")
+  },
+  async ({ categoryData }) => {
+    try {
+      const result = await categoriesTools.createCategory(categoryData);
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        resources: [{
+          type: 'ProductCategory',
+          id: result.categoryID,
+          data: result
+        }]
+      };
+    } catch (error) {
+      console.error(`Error executing createCategory: ${error.message}`);
+      return {
+        content: [{ type: "text", text: `Error: ${error.message}` }],
+        isError: true
+      };
+    }
+  }
+);
+
+server.tool(
+  "getCategory",
+  "Retrieve detailed information about a specific product category by its unique identifier.",
+  {
+    categoryId: z.string().describe("Category ID")
+  },
+  async ({ categoryId }) => {
+    try {
+      const result = await categoriesTools.getCategory(categoryId);
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        resources: [{
+          type: 'ProductCategory',
+          id: result.categoryID,
+          data: result
+        }]
+      };
+    } catch (error) {
+      console.error(`Error executing getCategory: ${error.message}`);
+      return {
+        content: [{ type: "text", text: `Error: ${error.message}` }],
+        isError: true
+      };
+    }
+  }
+);
+
+server.tool(
+  "updateCategory",
+  "Update an existing product category. IMPORTANT: You must first get the category using getCategory and preserve the returned structure when updating.",
+  {
+    categoryId: z.string().describe("Category ID"),
+    categoryData: z.object({}).passthrough().describe("Category data in the same structure as returned by getCategory")
+  },
+  async ({ categoryId, categoryData }) => {
+    try {
+      const result = await categoriesTools.updateCategory(categoryId, categoryData);
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        resources: [{
+          type: 'ProductCategory',
+          id: result.categoryID,
+          data: result
+        }]
+      };
+    } catch (error) {
+      console.error(`Error executing updateCategory: ${error.message}`);
+      return {
+        content: [{ type: "text", text: `Error: ${error.message}` }],
+        isError: true
+      };
+    }
+  }
+);
+
+server.tool(
+  "deleteCategory",
+  "Remove a product category from the Omnisend catalog by its unique identifier.",
+  {
+    categoryId: z.string().describe("Category ID")
+  },
+  async ({ categoryId }) => {
+    try {
+      const result = await categoriesTools.deleteCategory(categoryId);
+      return {
+        content: [{ type: "text", text: result ? "Category successfully deleted" : "Category was not deleted" }]
+      };
+    } catch (error) {
+      console.error(`Error executing deleteCategory: ${error.message}`);
+      return {
+        content: [{ type: "text", text: `Error: ${error.message}` }],
+        isError: true
+      };
+    }
+  }
+);
+
+// Start receiving messages on stdin and sending messages on stdout
 const transport = new StdioServerTransport();
 await server.connect(transport);
