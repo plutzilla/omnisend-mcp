@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -11,7 +11,7 @@ if (!apiKey) {
   process.exit(1);
 }
 
-const omnisendApi = axios.create({
+const omnisendApi: AxiosInstance = axios.create({
   baseURL,
   headers: {
     'X-API-KEY': apiKey,

@@ -1,17 +1,44 @@
 # Omnisend MCP Server
 
-A Model Context Protocol (MCP) server that integrates with Omnisend API V5.
+A Model Context Protocol (MCP) server that integrates with Omnisend API V5, written in TypeScript.
+
+**Version:** 2.0.0
 
 ## Features
 
 - Contact management (list, create, get, update)
 - Product management (list, create, get, replace, delete)
 - Event tracking
+- Product categories management
+
+## Changes in Version 2.0.0
+
+- Migrated entire codebase to TypeScript
+- Updated MCP resource structure according to latest specification
+- Added proper type declarations for all API responses and requests
+- Improved error handling with typed exceptions
+- Enhanced code organization and maintainability
 
 ## Installation
 
 ```bash
 npm install
+```
+
+## Building
+
+To compile TypeScript code:
+
+```bash
+npm run build
+```
+
+## Running in Development Mode
+
+For development with auto-reloading:
+
+```bash
+npm run dev
 ```
 
 ## Configuration
@@ -67,7 +94,7 @@ To use this MCP server with Claude Desktop:
        "omnisend": {
          "command": "node",
          "args": [
-           "/path/to/index.js"
+           "/path/to/dist/index.js"
          ],
          "env": {
            "OMNISEND_API_KEY": "your_api_key_here"

@@ -9,78 +9,131 @@ import * as contactsTools from './tools/contacts.js';
 import * as productsTools from './tools/products.js';
 import * as eventsTools from './tools/events.js';
 import * as categoriesTools from './tools/categories.js';
+import { Resource } from './types/index.js';
 
 // Create MCP server
 const server = new McpServer(
   {
     name: "Omnisend API",
-    version: "1.0.0",
+    version: "2.0.0",
   }
 );
 
 // Define MCP resources
-server.resource('Contact', {
-  description: 'Represents a contact in Omnisend. Each contact can be identified by multiple identifiers (email, phone) with corresponding channels.',
-  fields: {
-    contactID: { type: 'string', description: 'Unique identifier of the contact' },
-    email: { type: 'string', description: 'Email address of the contact' },
-    phone: { type: 'string', description: 'Phone number of the contact' },
-    firstName: { type: 'string', description: 'First name of the contact' },
-    lastName: { type: 'string', description: 'Last name of the contact' },
-    status: { type: 'string', description: 'Subscription status: subscribed, unsubscribed, nonSubscribed' },
-    tags: { type: 'array', description: 'Tags associated with the contact' },
-    identifiers: { type: 'array', description: 'Identifiers for the contact (email, phone)' },
-    createdAt: { type: 'string', description: 'Date when the contact was created' },
-    updatedAt: { type: 'string', description: 'Date when the contact was last updated' }
+server.resource(
+  'Contact',
+  'contact://schema',
+  {
+    type: 'Contact',
+    description: 'Represents a contact in Omnisend. Each contact can be identified by multiple identifiers (email, phone) with corresponding channels.',
+    fields: {
+      contactID: { type: 'string', description: 'Unique identifier of the contact' },
+      email: { type: 'string', description: 'Email address of the contact' },
+      phone: { type: 'string', description: 'Phone number of the contact' },
+      firstName: { type: 'string', description: 'First name of the contact' },
+      lastName: { type: 'string', description: 'Last name of the contact' },
+      status: { type: 'string', description: 'Subscription status: subscribed, unsubscribed, nonSubscribed' },
+      tags: { type: 'array', description: 'Tags associated with the contact' },
+      identifiers: { type: 'array', description: 'Identifiers for the contact (email, phone)' },
+      createdAt: { type: 'string', description: 'Date when the contact was created' },
+      updatedAt: { type: 'string', description: 'Date when the contact was last updated' }
+    }
+  },
+  async (uri) => {
+    return {
+      contents: [{
+        uri: uri.href,
+        text: "Contact schema definition"
+      }]
+    };
   }
-});
+);
 
-server.resource('Product', {
-  description: 'Represents a product in the Omnisend catalog.',
-  fields: {
-    productID: { type: 'string', description: 'Unique identifier of the product' },
-    title: { type: 'string', description: 'Product title' },
-    status: { type: 'string', description: 'Product status: draft, active, archived' },
-    description: { type: 'string', description: 'Product description' },
-    currency: { type: 'string', description: 'Currency code for product price' },
-    price: { type: 'number', description: 'Product price' },
-    oldPrice: { type: 'number', description: 'Old product price (before discount)' },
-    productUrl: { type: 'string', description: 'URL to the product page' },
-    imageUrl: { type: 'string', description: 'URL to the product image' },
-    vendor: { type: 'string', description: 'Product vendor/brand' },
-    variants: { type: 'array', description: 'Product variants with different sizes, colors, etc.' },
-    createdAt: { type: 'string', description: 'Date when the product was created' },
-    updatedAt: { type: 'string', description: 'Date when the product was last updated' }
+server.resource(
+  'Product',
+  'product://schema',
+  {
+    type: 'Product',
+    description: 'Represents a product in the Omnisend catalog.',
+    fields: {
+      productID: { type: 'string', description: 'Unique identifier of the product' },
+      title: { type: 'string', description: 'Product title' },
+      status: { type: 'string', description: 'Product status: draft, active, archived' },
+      description: { type: 'string', description: 'Product description' },
+      currency: { type: 'string', description: 'Currency code for product price' },
+      price: { type: 'number', description: 'Product price' },
+      oldPrice: { type: 'number', description: 'Old product price (before discount)' },
+      productUrl: { type: 'string', description: 'URL to the product page' },
+      imageUrl: { type: 'string', description: 'URL to the product image' },
+      vendor: { type: 'string', description: 'Product vendor/brand' },
+      variants: { type: 'array', description: 'Product variants with different sizes, colors, etc.' },
+      createdAt: { type: 'string', description: 'Date when the product was created' },
+      updatedAt: { type: 'string', description: 'Date when the product was last updated' }
+    }
+  },
+  async (uri) => {
+    return {
+      contents: [{
+        uri: uri.href,
+        text: "Product schema definition"
+      }]
+    };
   }
-});
+);
 
-server.resource('Event', {
-  description: 'Represents a customer event in Omnisend.',
-  fields: {
-    eventID: { type: 'string', description: 'Unique identifier of the event' },
-    eventName: { type: 'string', description: 'Name of the event (e.g., "placed order", "viewed product")' },
-    email: { type: 'string', description: 'Email address of the contact who triggered the event' },
-    phone: { type: 'string', description: 'Phone number of the contact who triggered the event' },
-    contactID: { type: 'string', description: 'ID of the contact who triggered the event' },
-    contact: { type: 'object', description: 'Contact information' },
-    properties: { type: 'object', description: 'Additional event properties' },
-    createdAt: { type: 'string', description: 'Date when the event occurred' }
+server.resource(
+  'Event',
+  'event://schema',
+  {
+    type: 'Event',
+    description: 'Represents a customer event in Omnisend.',
+    fields: {
+      eventID: { type: 'string', description: 'Unique identifier of the event' },
+      eventName: { type: 'string', description: 'Name of the event (e.g., "placed order", "viewed product")' },
+      email: { type: 'string', description: 'Email address of the contact who triggered the event' },
+      phone: { type: 'string', description: 'Phone number of the contact who triggered the event' },
+      contactID: { type: 'string', description: 'ID of the contact who triggered the event' },
+      contact: { type: 'object', description: 'Contact information' },
+      properties: { type: 'object', description: 'Additional event properties' },
+      createdAt: { type: 'string', description: 'Date when the event occurred' }
+    }
+  },
+  async (uri) => {
+    return {
+      contents: [{
+        uri: uri.href,
+        text: "Event schema definition"
+      }]
+    };
   }
-});
+);
 
-server.resource('ProductCategory', {
-  description: 'Represents a product category in Omnisend.',
-  fields: {
-    categoryID: { type: 'string', description: 'Unique identifier of the category' },
-    title: { type: 'string', description: 'Category title' },
-    handle: { type: 'string', description: 'Category handle/slug' },
-    description: { type: 'string', description: 'Category description' },
-    imageUrl: { type: 'string', description: 'URL to the category image' },
-    categoryUrl: { type: 'string', description: 'URL to the category page' },
-    createdAt: { type: 'string', description: 'Date when the category was created' },
-    updatedAt: { type: 'string', description: 'Date when the category was last updated' }
+server.resource(
+  'ProductCategory',
+  'category://schema',
+  {
+    type: 'ProductCategory',
+    description: 'Represents a product category in Omnisend.',
+    fields: {
+      categoryID: { type: 'string', description: 'Unique identifier of the category' },
+      title: { type: 'string', description: 'Category title' },
+      handle: { type: 'string', description: 'Category handle/slug' },
+      description: { type: 'string', description: 'Category description' },
+      imageUrl: { type: 'string', description: 'URL to the category image' },
+      categoryUrl: { type: 'string', description: 'URL to the category page' },
+      createdAt: { type: 'string', description: 'Date when the category was created' },
+      updatedAt: { type: 'string', description: 'Date when the category was last updated' }
+    }
+  },
+  async (uri) => {
+    return {
+      contents: [{
+        uri: uri.href,
+        text: "Product category schema definition"
+      }]
+    };
   }
-});
+);
 
 // Add a simple ping tool to check if the server is working
 server.tool(
@@ -89,7 +142,7 @@ server.tool(
   {},
   async () => {
     return {
-      content: [{ type: "text", text: "Omnisend MCP server is working correctly. Server version: 1.0.0" }]
+      content: [{ type: "text", text: "Omnisend MCP server is working correctly. Server version: 2.0.0" }]
     };
   }
 );
@@ -115,12 +168,12 @@ server.tool(
           type: 'Contact',
           id: contact.contactID,
           data: contact
-        })) || []
+        } as Resource)) || []
       };
     } catch (error) {
-      console.error(`Error executing listContacts: ${error.message}`);
+      console.error(`Error executing listContacts: ${(error as Error).message}`);
       return {
-        content: [{ type: "text", text: `Error: ${error.message}` }],
+        content: [{ type: "text", text: `Error: ${(error as Error).message}` }],
         isError: true
       };
     }
@@ -142,12 +195,12 @@ server.tool(
           type: 'Contact',
           id: result.contactID,
           data: result
-        }]
+        } as Resource]
       };
     } catch (error) {
-      console.error(`Error executing createContact: ${error.message}`);
+      console.error(`Error executing createContact: ${(error as Error).message}`);
       return {
-        content: [{ type: "text", text: `Error: ${error.message}` }],
+        content: [{ type: "text", text: `Error: ${(error as Error).message}` }],
         isError: true
       };
     }
@@ -169,12 +222,12 @@ server.tool(
           type: 'Contact',
           id: result.contactID,
           data: result
-        }]
+        } as Resource]
       };
     } catch (error) {
-      console.error(`Error executing getContact: ${error.message}`);
+      console.error(`Error executing getContact: ${(error as Error).message}`);
       return {
-        content: [{ type: "text", text: `Error: ${error.message}` }],
+        content: [{ type: "text", text: `Error: ${(error as Error).message}` }],
         isError: true
       };
     }
@@ -197,12 +250,12 @@ server.tool(
           type: 'Contact',
           id: result.contactID,
           data: result
-        }]
+        } as Resource]
       };
     } catch (error) {
-      console.error(`Error executing updateContact: ${error.message}`);
+      console.error(`Error executing updateContact: ${(error as Error).message}`);
       return {
-        content: [{ type: "text", text: `Error: ${error.message}` }],
+        content: [{ type: "text", text: `Error: ${(error as Error).message}` }],
         isError: true
       };
     }
@@ -226,12 +279,12 @@ server.tool(
           type: 'Product',
           id: product.productID,
           data: product
-        })) || []
+        } as Resource)) || []
       };
     } catch (error) {
-      console.error(`Error executing listProducts: ${error.message}`);
+      console.error(`Error executing listProducts: ${(error as Error).message}`);
       return {
-        content: [{ type: "text", text: `Error: ${error.message}` }],
+        content: [{ type: "text", text: `Error: ${(error as Error).message}` }],
         isError: true
       };
     }
@@ -253,12 +306,12 @@ server.tool(
           type: 'Product',
           id: result.productID,
           data: result
-        }]
+        } as Resource]
       };
     } catch (error) {
-      console.error(`Error executing createProduct: ${error.message}`);
+      console.error(`Error executing createProduct: ${(error as Error).message}`);
       return {
-        content: [{ type: "text", text: `Error: ${error.message}` }],
+        content: [{ type: "text", text: `Error: ${(error as Error).message}` }],
         isError: true
       };
     }
@@ -280,12 +333,12 @@ server.tool(
           type: 'Product',
           id: result.productID,
           data: result
-        }]
+        } as Resource]
       };
     } catch (error) {
-      console.error(`Error executing getProduct: ${error.message}`);
+      console.error(`Error executing getProduct: ${(error as Error).message}`);
       return {
-        content: [{ type: "text", text: `Error: ${error.message}` }],
+        content: [{ type: "text", text: `Error: ${(error as Error).message}` }],
         isError: true
       };
     }
@@ -308,12 +361,12 @@ server.tool(
           type: 'Product',
           id: result.productID,
           data: result
-        }]
+        } as Resource]
       };
     } catch (error) {
-      console.error(`Error executing replaceProduct: ${error.message}`);
+      console.error(`Error executing replaceProduct: ${(error as Error).message}`);
       return {
-        content: [{ type: "text", text: `Error: ${error.message}` }],
+        content: [{ type: "text", text: `Error: ${(error as Error).message}` }],
         isError: true
       };
     }
@@ -333,9 +386,9 @@ server.tool(
         content: [{ type: "text", text: result ? "Product successfully deleted" : "Product was not deleted" }]
       };
     } catch (error) {
-      console.error(`Error executing deleteProduct: ${error.message}`);
+      console.error(`Error executing deleteProduct: ${(error as Error).message}`);
       return {
-        content: [{ type: "text", text: `Error: ${error.message}` }],
+        content: [{ type: "text", text: `Error: ${(error as Error).message}` }],
         isError: true
       };
     }
@@ -349,7 +402,13 @@ server.tool(
   {
     eventData: z.object({
       eventName: z.string().describe("Event name"),
-      contact: z.object({}).passthrough().describe("Contact information"),
+      contact: z.object({
+        contactID: z.string().optional(),
+        email: z.string().optional(),
+        phone: z.string().optional(),
+        firstName: z.string().optional(),
+        lastName: z.string().optional()
+      }).passthrough().describe("Contact information"),
       properties: z.object({}).passthrough().optional().describe("Additional event properties"),
       eventTime: z.string().optional().describe("Event time in RFC3339 format"),
       eventVersion: z.string().optional().describe("Event version")
@@ -364,12 +423,12 @@ server.tool(
           type: 'Event',
           id: result.eventID,
           data: result
-        }]
+        } as Resource]
       };
     } catch (error) {
-      console.error(`Error executing sendEvent: ${error.message}`);
+      console.error(`Error executing sendEvent: ${(error as Error).message}`);
       return {
-        content: [{ type: "text", text: `Error: ${error.message}` }],
+        content: [{ type: "text", text: `Error: ${(error as Error).message}` }],
         isError: true
       };
     }
@@ -393,12 +452,12 @@ server.tool(
           type: 'ProductCategory',
           id: category.categoryID,
           data: category
-        })) || []
+        } as Resource)) || []
       };
     } catch (error) {
-      console.error(`Error executing listCategories: ${error.message}`);
+      console.error(`Error executing listCategories: ${(error as Error).message}`);
       return {
-        content: [{ type: "text", text: `Error: ${error.message}` }],
+        content: [{ type: "text", text: `Error: ${(error as Error).message}` }],
         isError: true
       };
     }
@@ -420,12 +479,12 @@ server.tool(
           type: 'ProductCategory',
           id: result.categoryID,
           data: result
-        }]
+        } as Resource]
       };
     } catch (error) {
-      console.error(`Error executing createCategory: ${error.message}`);
+      console.error(`Error executing createCategory: ${(error as Error).message}`);
       return {
-        content: [{ type: "text", text: `Error: ${error.message}` }],
+        content: [{ type: "text", text: `Error: ${(error as Error).message}` }],
         isError: true
       };
     }
@@ -447,12 +506,12 @@ server.tool(
           type: 'ProductCategory',
           id: result.categoryID,
           data: result
-        }]
+        } as Resource]
       };
     } catch (error) {
-      console.error(`Error executing getCategory: ${error.message}`);
+      console.error(`Error executing getCategory: ${(error as Error).message}`);
       return {
-        content: [{ type: "text", text: `Error: ${error.message}` }],
+        content: [{ type: "text", text: `Error: ${(error as Error).message}` }],
         isError: true
       };
     }
@@ -475,12 +534,12 @@ server.tool(
           type: 'ProductCategory',
           id: result.categoryID,
           data: result
-        }]
+        } as Resource]
       };
     } catch (error) {
-      console.error(`Error executing updateCategory: ${error.message}`);
+      console.error(`Error executing updateCategory: ${(error as Error).message}`);
       return {
-        content: [{ type: "text", text: `Error: ${error.message}` }],
+        content: [{ type: "text", text: `Error: ${(error as Error).message}` }],
         isError: true
       };
     }
@@ -500,9 +559,9 @@ server.tool(
         content: [{ type: "text", text: result ? "Category successfully deleted" : "Category was not deleted" }]
       };
     } catch (error) {
-      console.error(`Error executing deleteCategory: ${error.message}`);
+      console.error(`Error executing deleteCategory: ${(error as Error).message}`);
       return {
-        content: [{ type: "text", text: `Error: ${error.message}` }],
+        content: [{ type: "text", text: `Error: ${(error as Error).message}` }],
         isError: true
       };
     }
@@ -511,4 +570,4 @@ server.tool(
 
 // Start receiving messages on stdin and sending messages on stdout
 const transport = new StdioServerTransport();
-await server.connect(transport);
+await server.connect(transport); 
