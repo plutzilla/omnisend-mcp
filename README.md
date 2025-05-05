@@ -147,3 +147,7 @@ const result = await client.executeTool("listContacts", { limit: 10 });
 ## API Documentation
 
 For more information about the Omnisend API, see the [official documentation](https://api-docs.omnisend.com/). 
+
+## License
+
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details. 
