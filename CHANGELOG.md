@@ -1,6 +1,6 @@
 # Omnisend MCP Server Changelog
 
-## 2.1.0 (2025-04-28)
+## 2.1.0 (2025-05-05)
 
 ### Improvements
 - Updated @modelcontextprotocol/sdk to version 1.11.0
@@ -15,7 +15,7 @@
 - Replaced console.error with process.stderr.write to avoid JSON parsing errors
 - Improved error type handling to avoid type casting issues
 
-## 2.0.0 (2025-04-25)
+## 2.0.0 (2025-05-01)
 
 ### Major Changes
 - Migrated entire codebase from JavaScript to TypeScript
@@ -29,7 +29,7 @@
 - Implemented proper ESM imports
 - Added TypeScript configuration and build process
 
-## 1.0.0 (2025-04-20)
+## 1.0.0 (2025-04-15)
 
 ### Initial Release
 - Basic MCP server implementation with JavaScript
