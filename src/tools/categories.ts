@@ -1,6 +1,5 @@
 import omnisendApi from '../utils/api.js';
 import { ProductCategory, CategoriesResponse, ListCategoriesParams } from '../types/index.js';
-import { AxiosError } from 'axios';
 
 // Get product categories list
 export const listCategories = async (params: ListCategoriesParams = {}): Promise<CategoriesResponse> => {
@@ -8,8 +7,11 @@ export const listCategories = async (params: ListCategoriesParams = {}): Promise
     const response = await omnisendApi.get<CategoriesResponse>('/product-categories', { params });
     return response.data;
   } catch (error) {
-    const axiosError = error as AxiosError;
-    throw new Error(`Error getting product categories list: ${axiosError.message}`);
+    if (error instanceof Error) {
+      throw new Error(`Error getting product categories list: ${error.message}`);
+    } else {
+      throw new Error('Unknown error occurred when getting product categories list');
+    }
   }
 };
 
@@ -19,8 +21,11 @@ export const createCategory = async (categoryData: Partial<ProductCategory>): Pr
     const response = await omnisendApi.post<ProductCategory>('/product-categories', categoryData);
     return response.data;
   } catch (error) {
-    const axiosError = error as AxiosError;
-    throw new Error(`Error creating product category: ${axiosError.message}`);
+    if (error instanceof Error) {
+      throw new Error(`Error creating product category: ${error.message}`);
+    } else {
+      throw new Error('Unknown error occurred when creating product category');
+    }
   }
 };
 
@@ -30,8 +35,11 @@ export const getCategory = async (categoryId: string): Promise<ProductCategory> 
     const response = await omnisendApi.get<ProductCategory>(`/product-categories/${categoryId}`);
     return response.data;
   } catch (error) {
-    const axiosError = error as AxiosError;
-    throw new Error(`Error getting product category information: ${axiosError.message}`);
+    if (error instanceof Error) {
+      throw new Error(`Error getting product category information: ${error.message}`);
+    } else {
+      throw new Error('Unknown error occurred when getting product category');
+    }
   }
 };
 
@@ -41,8 +49,11 @@ export const updateCategory = async (categoryId: string, categoryData: Partial<P
     const response = await omnisendApi.patch<ProductCategory>(`/product-categories/${categoryId}`, categoryData);
     return response.data;
   } catch (error) {
-    const axiosError = error as AxiosError;
-    throw new Error(`Error updating product category: ${axiosError.message}`);
+    if (error instanceof Error) {
+      throw new Error(`Error updating product category: ${error.message}`);
+    } else {
+      throw new Error('Unknown error occurred when updating product category');
+    }
   }
 };
 
@@ -52,7 +63,10 @@ export const deleteCategory = async (categoryId: string): Promise<boolean> => {
     const response = await omnisendApi.delete(`/product-categories/${categoryId}`);
     return response.status === 204; // Returns true if successfully deleted
   } catch (error) {
-    const axiosError = error as AxiosError;
-    throw new Error(`Error deleting product category: ${axiosError.message}`);
+    if (error instanceof Error) {
+      throw new Error(`Error deleting product category: ${error.message}`);
+    } else {
+      throw new Error('Unknown error occurred when deleting product category');
+    }
   }
 }; 

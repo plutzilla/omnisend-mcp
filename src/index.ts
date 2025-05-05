@@ -15,7 +15,7 @@ import { Resource } from './types/index.js';
 const server = new McpServer(
   {
     name: "Omnisend API",
-    version: "2.0.0",
+    version: "2.1.0",
   }
 );
 
@@ -142,7 +142,7 @@ server.tool(
   {},
   async () => {
     return {
-      content: [{ type: "text", text: "Omnisend MCP server is working correctly. Server version: 2.0.0" }]
+      content: [{ type: "text", text: "Omnisend MCP server is working correctly. Server version: 2.1.0" }]
     };
   }
 );
@@ -570,4 +570,10 @@ server.tool(
 
 // Start receiving messages on stdin and sending messages on stdout
 const transport = new StdioServerTransport();
-await server.connect(transport); 
+
+try {
+  await server.connect(transport);
+} catch (error) {
+  process.stderr.write(`Error connecting MCP server to transport: ${(error as Error).message}\n`);
+  process.exit(1);
+} 

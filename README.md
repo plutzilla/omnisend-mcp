@@ -2,7 +2,7 @@
 
 A Model Context Protocol (MCP) server that integrates with Omnisend API V5, written in TypeScript.
 
-**Version:** 2.0.0
+**Version:** 2.1.0
 
 ## Features
 
@@ -10,6 +10,15 @@ A Model Context Protocol (MCP) server that integrates with Omnisend API V5, writ
 - Product management (list, create, get, replace, delete)
 - Event tracking
 - Product categories management
+
+## Changes in Version 2.1.0
+
+- Updated to @modelcontextprotocol/sdk v1.11.0
+- Improved error handling throughout the application
+- Enhanced API stability with better error messages
+- Added request timeout configuration to prevent hanging connections
+- Fixed SSE connection issues with MCP Inspector
+- Optimized console output to be compatible with MCP clients
 
 ## Changes in Version 2.0.0
 

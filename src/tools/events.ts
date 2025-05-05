@@ -1,6 +1,5 @@
 import omnisendApi from '../utils/api.js';
 import { Event } from '../types/index.js';
-import { AxiosError } from 'axios';
 
 interface EventSendData extends Omit<Partial<Event>, 'contact'> {
   eventName: string;
@@ -24,7 +23,10 @@ export const sendEvent = async (eventData: EventSendData): Promise<Event> => {
     const response = await omnisendApi.post<Event>('/events', data);
     return response.data;
   } catch (error) {
-    const axiosError = error as AxiosError;
-    throw new Error(`Error sending event: ${axiosError.message}`);
+    if (error instanceof Error) {
+      throw new Error(`Error sending event: ${error.message}`);
+    } else {
+      throw new Error('Unknown error occurred when sending event');
+    }
   }
 }; 
