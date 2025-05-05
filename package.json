@@ -1,11 +1,18 @@
 {
   "name": "omnisend-mcp",
-  "version": "1.0.0",
+  "version": "2.1.0",
   "description": "MCP server for Omnisend API integration",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "type": "module",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node dist/index.js",
+    "dev": "ts-node --esm src/index.ts",
+    "build": "tsc",
+    "watch": "tsc -w",
+    "clean": "rimraf dist",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "mcp",
@@ -13,15 +20,20 @@
     "api"
   ],
   "author": "",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.10.2",
+    "@modelcontextprotocol/sdk": "^1.11.0",
     "axios": "^1.9.0",
     "dotenv": "^16.5.0",
     "zod": "^3.24.3"
   },
   "devDependencies": {
     "@types/node": "^22.15.3",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.56.0",
+    "rimraf": "^5.0.5",
+    "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }
 }

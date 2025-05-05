@@ -1,6 +1,8 @@
 # Omnisend MCP Server
 
-A Model Context Protocol (MCP) server that integrates with Omnisend API V5.
+A Model Context Protocol (MCP) server that integrates with Omnisend API V5, written in TypeScript.
+
+**Version:** 2.1.0
 
 <a href="https://glama.ai/mcp/servers/@plutzilla/omnisend-mcp">
   <img width="380" height="200" src="https://glama.ai/mcp/servers/@plutzilla/omnisend-mcp/badge" alt="Omnisend Server MCP server" />
@@ -11,11 +13,45 @@ A Model Context Protocol (MCP) server that integrates with Omnisend API V5.
 - Contact management (list, create, get, update)
 - Product management (list, create, get, replace, delete)
 - Event tracking
+- Product categories management
+
+## Changes in Version 2.1.0
+
+- Updated to @modelcontextprotocol/sdk v1.11.0
+- Improved error handling throughout the application
+- Enhanced API stability with better error messages
+- Added request timeout configuration to prevent hanging connections
+- Fixed SSE connection issues with MCP Inspector
+- Optimized console output to be compatible with MCP clients
+
+## Changes in Version 2.0.0
+
+- Migrated entire codebase to TypeScript
+- Updated MCP resource structure according to latest specification
+- Added proper type declarations for all API responses and requests
+- Improved error handling with typed exceptions
+- Enhanced code organization and maintainability
 
 ## Installation
 
 ```bash
 npm install
+```
+
+## Building
+
+To compile TypeScript code:
+
+```bash
+npm run build
+```
+
+## Running in Development Mode
+
+For development with auto-reloading:
+
+```bash
+npm run dev
 ```
 
 ## Configuration
@@ -71,7 +107,7 @@ To use this MCP server with Claude Desktop:
        "omnisend": {
          "command": "node",
          "args": [
-           "/path/to/index.js"
+           "/path/to/dist/index.js"
          ],
          "env": {
            "OMNISEND_API_KEY": "your_api_key_here"
@@ -114,4 +150,9 @@ const result = await client.executeTool("listContacts", { limit: 10 });
 
 ## API Documentation
 
-For more information about the Omnisend API, see the [official documentation](https://api-docs.omnisend.com/).
+For more information about the Omnisend API, see the [official documentation](https://api-docs.omnisend.com/). 
+
+## License
+
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details. 
+
