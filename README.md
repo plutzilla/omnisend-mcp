@@ -71,15 +71,6 @@ To start the MCP server:
 npm start
 ```
 
-
-
-## Running evals
-
-The evals package loads an mcp client that then runs the index.ts file, so there is no need to rebuild between tests. You can load environment variables by prefixing the npx command. Full documentation can be found [here](https://www.mcpevals.io/docs).
-
-```bash
-OPENAI_API_KEY=your-key  npx mcp-eval src/evals/evals.ts src/index.ts
-```
 ## Interacting with the MCP Server
 
 The MCP server is designed to be used with clients that understand the Model Context Protocol. Here are ways to interact with it:
@@ -160,6 +151,14 @@ const result = await client.executeTool("listContacts", { limit: 10 });
 ## API Documentation
 
 For more information about the Omnisend API, see the [official documentation](https://api-docs.omnisend.com/). 
+
+## Running evals
+
+The evals package loads an mcp client that then runs the index.ts file, so there is no need to rebuild between tests. You can load environment variables by prefixing the npx command. Full documentation can be found [here](https://www.mcpevals.io/docs).
+
+```bash
+OPENAI_API_KEY=your-key  npx mcp-eval src/evals/evals.ts src/index.ts
+```
 
 ## License
 
