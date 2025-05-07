@@ -2,7 +2,7 @@
 
 A Model Context Protocol (MCP) server that integrates with Omnisend API V5, written in TypeScript.
 
-**Version:** 2.1.0
+**Version:** 2.2.0
 
 <a href="https://glama.ai/mcp/servers/@plutzilla/omnisend-mcp">
 <img width="380" src="https://glama.ai/mcp/servers/@plutzilla/omnisend-mcp/badge" alt="Omnisend Server MCP server" />
@@ -15,6 +15,16 @@ A Model Context Protocol (MCP) server that integrates with Omnisend API V5, writ
 - Event tracking
 - Product categories management
 - Cursor-based pagination support with next/previous URLs and limit/offset information
+
+## Changes in Version 2.2.0
+
+- Refactored codebase to a more modular structure
+- Implemented domain-specific modules (contacts, products, categories, events)
+- Organized code into logical directories (/types, /filters, /api-resources, /resources, /tools)
+- Made server version dynamic in the ping tool
+- Added better error handling in API requests
+- Improved code maintainability with barrel exports
+- Removed redundant and duplicate code
 
 ## Changes in Version 2.1.0
 

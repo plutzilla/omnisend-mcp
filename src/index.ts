@@ -4,23 +4,28 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 
 // Import modules
-import { registerResources } from './modules/shared/resources.js';
-import { registerPingTool } from './modules/shared/server.js';
-import { registerContactsTools } from './modules/contacts/tools.js';
-import { registerProductsTools } from './modules/products/tools.js';
-import { registerCategoriesTools } from './modules/categories/tools.js';
-import { registerEventsTools } from './modules/events/tools.js';
+import { registerAllResources } from './resources/index.js';
+import { 
+  registerPingTool, 
+  registerContactsTools, 
+  registerProductsTools, 
+  registerCategoriesTools, 
+  registerEventsTools 
+} from './tools/index.js';
+
+// Define the server version (hardcoded for simplicity)
+export const SERVER_VERSION = "2.2.0";
 
 // Create MCP server
 const server = new McpServer(
   {
     name: "Omnisend API",
-    version: "2.1.0",
+    version: SERVER_VERSION,
   }
 );
 
 // Register resources and tools
-registerResources(server);
+registerAllResources(server);
 registerPingTool(server);
 registerContactsTools(server);
 registerProductsTools(server);

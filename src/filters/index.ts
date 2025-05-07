@@ -1,5 +1,4 @@
-// Re-export all domain-specific types
-export * from './shared/common.js';
+// Re-export all domain-specific filters
 export * from './contacts/index.js';
 export * from './products/index.js';
 export * from './categories/index.js';

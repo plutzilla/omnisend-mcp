@@ -1,5 +1,24 @@
 # Omnisend MCP Server Changelog
 
+## 2.2.0 (2025-05-10)
+
+### Improvements
+
+- Refactored codebase to a more modular structure
+- Implemented domain-specific modules (contacts, products, categories, events)
+- Organized code into logical directories (/types, /filters, /api-resources, /resources, /tools)
+- Made server version dynamic in the ping tool
+- Added better error handling in API requests
+- Improved code maintainability with barrel exports
+- Removed redundant and duplicate code
+
+### Code Improvements
+
+- Separated concerns between API clients, filters, resources, and tools
+- Enhanced type definitions with proper domain-specific interfaces
+- Improved code organization for better maintainability
+- Implemented consistent error handling across all modules
+
 ## 2.1.0 (2025-05-05)
 
 ### Improvements
