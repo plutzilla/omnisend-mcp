@@ -5,7 +5,7 @@ A Model Context Protocol (MCP) server that integrates with Omnisend API V5, writ
 **Version:** 2.1.0
 
 <a href="https://glama.ai/mcp/servers/@plutzilla/omnisend-mcp">
-  <img width="380" height="200" src="https://glama.ai/mcp/servers/@plutzilla/omnisend-mcp/badge" alt="Omnisend Server MCP server" />
+<img width="380" src="https://glama.ai/mcp/servers/@plutzilla/omnisend-mcp/badge" alt="Omnisend Server MCP server" />
 </a>
 
 ## Features
@@ -58,7 +58,7 @@ npm run dev
 
 Create a `.env` file in the root directory with your Omnisend API key:
 
-```
+```javascript
 OMNISEND_API_KEY=your_api_key_here
 OMNISEND_API_URL=https://api.omnisend.com/v5
 ```
@@ -73,11 +73,13 @@ npm start
 
 ## Interacting with the MCP Server
 
-The MCP server is designed to be used with clients that understand the Model Context Protocol. Here are ways to interact with it:
+The MCP server is designed to be used with clients that understand the Model Context Protocol.
+Here are ways to interact with it:
 
 ### VS Code Integration
 
-For use with VS Code, a configuration file is provided in `.vscode/mcp.json`. VS Code with the appropriate MCP extension can communicate with this server.
+For use with VS Code, a configuration file is provided in `.vscode/mcp.json`.
+VS Code with the appropriate MCP extension can communicate with this server.
 
 ### AI Assistants
 
@@ -90,9 +92,11 @@ To use this MCP server with Claude Desktop:
 1. Download and install Claude Desktop from the [official website](https://claude.ai/desktop).
 
 2. Make sure you have Node.js installed on your system. You can verify by running:
+
    ```bash
    node --version
    ```
+
    If Node.js is not installed, download it from [nodejs.org](https://nodejs.org/).
 
 3. Open the Claude menu on your computer and select "Settings..."
@@ -150,9 +154,8 @@ const result = await client.executeTool("listContacts", { limit: 10 });
 
 ## API Documentation
 
-For more information about the Omnisend API, see the [official documentation](https://api-docs.omnisend.com/). 
+For more information about the Omnisend API, see the [official documentation](https://api-docs.omnisend.com/).
 
 ## License
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details. 
-
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
