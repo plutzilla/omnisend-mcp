@@ -150,7 +150,7 @@ server.tool(
 // Register contacts tools
 server.tool(
   "listContacts",
-  "Retrieve a list of contacts from Omnisend. Each contact can be identified by multiple identifiers (email, phone) with corresponding channels.",
+  "Retrieve a list of contacts from Omnisend. Each contact can be identified by multiple identifiers (email, phone) with corresponding channels. The response includes pagination information (next/previous cursor, limit, offset).",
   {
     limit: z.number().optional().describe("Maximum number of contacts to return"),
     offset: z.number().optional().describe("Skip first N results"),
@@ -168,7 +168,15 @@ server.tool(
           type: 'Contact',
           id: contact.contactID,
           data: contact
-        } as Resource)) || []
+        } as Resource)) || [],
+        context: result.paging ? {
+          pagination: {
+            next: result.paging.next,
+            previous: result.paging.previous,
+            limit: result.paging.limit,
+            offset: result.paging.offset
+          }
+        } : undefined
       };
     } catch (error) {
       console.error(`Error executing listContacts: ${(error as Error).message}`);
@@ -265,7 +273,7 @@ server.tool(
 // Register products tools
 server.tool(
   "listProducts",
-  "Retrieve a list of products from the Omnisend catalog with pagination support.",
+  "Retrieve a list of products from the Omnisend catalog with pagination support. The response includes pagination information (next/previous cursor, limit, offset).",
   {
     limit: z.number().optional().describe("Maximum number of products to return"),
     offset: z.number().optional().describe("Skip first N results")
@@ -279,7 +287,15 @@ server.tool(
           type: 'Product',
           id: product.productID,
           data: product
-        } as Resource)) || []
+        } as Resource)) || [],
+        context: result.paging ? {
+          pagination: {
+            next: result.paging.next,
+            previous: result.paging.previous,
+            limit: result.paging.limit,
+            offset: result.paging.offset
+          }
+        } : undefined
       };
     } catch (error) {
       console.error(`Error executing listProducts: ${(error as Error).message}`);
@@ -438,7 +454,7 @@ server.tool(
 // Register product categories tools
 server.tool(
   "listCategories",
-  "Retrieve a list of product categories from the Omnisend catalog with pagination support.",
+  "Retrieve a list of product categories from the Omnisend catalog with pagination support. The response includes pagination information (next/previous cursor, limit, offset).",
   {
     limit: z.number().optional().describe("Maximum number of categories to return"),
     offset: z.number().optional().describe("Skip first N results")
@@ -452,7 +468,15 @@ server.tool(
           type: 'ProductCategory',
           id: category.categoryID,
           data: category
-        } as Resource)) || []
+        } as Resource)) || [],
+        context: result.paging ? {
+          pagination: {
+            next: result.paging.next,
+            previous: result.paging.previous,
+            limit: result.paging.limit,
+            offset: result.paging.offset
+          }
+        } : undefined
       };
     } catch (error) {
       console.error(`Error executing listCategories: ${(error as Error).message}`);

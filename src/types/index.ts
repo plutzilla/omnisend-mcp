@@ -39,7 +39,8 @@ export interface ContactsResponse {
   paging?: {
     previous?: string;
     next?: string;
-    total?: number;
+    limit?: number;
+    offset?: number;
   };
 }
 
@@ -76,7 +77,8 @@ export interface ProductsResponse {
   paging?: {
     previous?: string;
     next?: string;
-    total?: number;
+    limit?: number;
+    offset?: number;
   };
 }
 
@@ -110,7 +112,8 @@ export interface CategoriesResponse {
   paging?: {
     previous?: string;
     next?: string;
-    total?: number;
+    limit?: number;
+    offset?: number;
   };
 }
 

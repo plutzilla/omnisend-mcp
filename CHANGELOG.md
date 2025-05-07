@@ -9,6 +9,7 @@
 - Added request timeout configuration (10s) to prevent hanging connections
 - Enhanced error messages with more detailed information
 - Implemented Axios response interceptors for better error handling
+- Added cursor-based pagination context in MCP responses (next/previous URLs, limit/offset)
 
 ### Bug Fixes
 

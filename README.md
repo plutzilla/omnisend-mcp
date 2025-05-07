@@ -14,6 +14,7 @@ A Model Context Protocol (MCP) server that integrates with Omnisend API V5, writ
 - Product management (list, create, get, replace, delete)
 - Event tracking
 - Product categories management
+- Cursor-based pagination support with next/previous URLs and limit/offset information
 
 ## Changes in Version 2.1.0
 
@@ -23,6 +24,7 @@ A Model Context Protocol (MCP) server that integrates with Omnisend API V5, writ
 - Added request timeout configuration to prevent hanging connections
 - Fixed SSE connection issues with MCP Inspector
 - Optimized console output to be compatible with MCP clients
+- Added cursor-based pagination context in MCP responses (next/previous URLs, limit/offset)
 
 ## Changes in Version 2.0.0
 
