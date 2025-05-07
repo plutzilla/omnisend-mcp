@@ -31,6 +31,11 @@ export interface Contact {
   identifiers?: ContactIdentifier[];
   createdAt?: string;
   updatedAt?: string;
+  country?: string;
+  state?: string;
+  city?: string;
+  gender?: string;
+  birthdate?: string;
   [key: string]: unknown;
 }
 

@@ -11,6 +11,72 @@ import * as eventsTools from './tools/events.js';
 import * as categoriesTools from './tools/categories.js';
 import { Resource } from './types/index.js';
 
+// Helper functions to filter data based on resource definitions
+const filterContactFields = (contact: any) => {
+  return {
+    contactID: contact.contactID,
+    email: contact.email,
+    phone: contact.phone,
+    firstName: contact.firstName,
+    lastName: contact.lastName,
+    status: contact.status,
+    tags: contact.tags,
+    identifiers: contact.identifiers,
+    createdAt: contact.createdAt,
+    updatedAt: contact.updatedAt,
+    // Include added fields
+    country: contact.country,
+    state: contact.state,
+    city: contact.city,
+    gender: contact.gender,
+    birthdate: contact.birthdate
+  };
+};
+
+const filterProductFields = (product: any) => {
+  return {
+    productID: product.productID,
+    title: product.title,
+    status: product.status,
+    description: product.description,
+    currency: product.currency,
+    price: product.price,
+    oldPrice: product.oldPrice,
+    productUrl: product.productUrl,
+    imageUrl: product.imageUrl,
+    vendor: product.vendor,
+    variants: product.variants,
+    createdAt: product.createdAt,
+    updatedAt: product.updatedAt
+  };
+};
+
+const filterCategoryFields = (category: any) => {
+  return {
+    categoryID: category.categoryID,
+    title: category.title,
+    handle: category.handle,
+    description: category.description,
+    imageUrl: category.imageUrl,
+    categoryUrl: category.categoryUrl,
+    createdAt: category.createdAt,
+    updatedAt: category.updatedAt
+  };
+};
+
+const filterEventFields = (event: any) => {
+  return {
+    eventID: event.eventID,
+    eventName: event.eventName,
+    email: event.email,
+    phone: event.phone,
+    contactID: event.contactID,
+    contact: event.contact ? filterContactFields(event.contact) : undefined,
+    properties: event.properties,
+    createdAt: event.createdAt
+  };
+};
+
 // Create MCP server
 const server = new McpServer(
   {
@@ -36,7 +102,12 @@ server.resource(
       tags: { type: 'array', description: 'Tags associated with the contact' },
       identifiers: { type: 'array', description: 'Identifiers for the contact (email, phone)' },
       createdAt: { type: 'string', description: 'Date when the contact was created' },
-      updatedAt: { type: 'string', description: 'Date when the contact was last updated' }
+      updatedAt: { type: 'string', description: 'Date when the contact was last updated' },
+      country: { type: 'string', description: 'Country of the contact' },
+      state: { type: 'string', description: 'State/region of the contact' },
+      city: { type: 'string', description: 'City of the contact' },
+      gender: { type: 'string', description: 'Gender of the contact' },
+      birthdate: { type: 'string', description: 'Birth date of the contact in ISO format' }
     }
   },
   async (uri) => {
@@ -159,15 +230,22 @@ server.tool(
   async ({ limit, offset, status }) => {
     try {
       const result = await contactsTools.listContacts({ limit, offset, status });
+      
+      // Create filtered response with only the defined fields
+      const filteredResult = {
+        contacts: result.contacts.map(filterContactFields),
+        paging: result.paging
+      };
+      
       return {
         content: [{ 
           type: "text", 
-          text: JSON.stringify(result, null, 2)
+          text: JSON.stringify(filteredResult, null, 2)
         }],
         resources: result.contacts?.map(contact => ({
           type: 'Contact',
           id: contact.contactID,
-          data: contact
+          data: filterContactFields(contact)
         } as Resource)) || [],
         context: result.paging ? {
           pagination: {
@@ -197,12 +275,14 @@ server.tool(
   async ({ contactData }) => {
     try {
       const result = await contactsTools.createOrUpdateContact(contactData);
+      const filteredResult = filterContactFields(result);
+      
       return {
-        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        content: [{ type: "text", text: JSON.stringify(filteredResult, null, 2) }],
         resources: [{
           type: 'Contact',
           id: result.contactID,
-          data: result
+          data: filterContactFields(result)
         } as Resource]
       };
     } catch (error) {
@@ -224,12 +304,14 @@ server.tool(
   async ({ contactId }) => {
     try {
       const result = await contactsTools.getContact(contactId);
+      const filteredResult = filterContactFields(result);
+      
       return {
-        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        content: [{ type: "text", text: JSON.stringify(filteredResult, null, 2) }],
         resources: [{
           type: 'Contact',
           id: result.contactID,
-          data: result
+          data: filterContactFields(result)
         } as Resource]
       };
     } catch (error) {
@@ -252,12 +334,14 @@ server.tool(
   async ({ contactId, contactData }) => {
     try {
       const result = await contactsTools.updateContact(contactId, contactData);
+      const filteredResult = filterContactFields(result);
+      
       return {
-        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        content: [{ type: "text", text: JSON.stringify(filteredResult, null, 2) }],
         resources: [{
           type: 'Contact',
           id: result.contactID,
-          data: result
+          data: filterContactFields(result)
         } as Resource]
       };
     } catch (error) {
@@ -281,12 +365,19 @@ server.tool(
   async ({ limit, offset }) => {
     try {
       const result = await productsTools.listProducts({ limit, offset });
+      
+      // Create filtered response with only the defined fields
+      const filteredResult = {
+        products: result.products.map(filterProductFields),
+        paging: result.paging
+      };
+      
       return {
-        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        content: [{ type: "text", text: JSON.stringify(filteredResult, null, 2) }],
         resources: result.products?.map(product => ({
           type: 'Product',
           id: product.productID,
-          data: product
+          data: filterProductFields(product)
         } as Resource)) || [],
         context: result.paging ? {
           pagination: {
@@ -316,12 +407,14 @@ server.tool(
   async ({ productData }) => {
     try {
       const result = await productsTools.createProduct(productData);
+      const filteredResult = filterProductFields(result);
+      
       return {
-        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        content: [{ type: "text", text: JSON.stringify(filteredResult, null, 2) }],
         resources: [{
           type: 'Product',
           id: result.productID,
-          data: result
+          data: filterProductFields(result)
         } as Resource]
       };
     } catch (error) {
@@ -343,12 +436,14 @@ server.tool(
   async ({ productId }) => {
     try {
       const result = await productsTools.getProduct(productId);
+      const filteredResult = filterProductFields(result);
+      
       return {
-        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        content: [{ type: "text", text: JSON.stringify(filteredResult, null, 2) }],
         resources: [{
           type: 'Product',
           id: result.productID,
-          data: result
+          data: filterProductFields(result)
         } as Resource]
       };
     } catch (error) {
@@ -371,12 +466,14 @@ server.tool(
   async ({ productId, productData }) => {
     try {
       const result = await productsTools.replaceProduct(productId, productData);
+      const filteredResult = filterProductFields(result);
+      
       return {
-        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        content: [{ type: "text", text: JSON.stringify(filteredResult, null, 2) }],
         resources: [{
           type: 'Product',
           id: result.productID,
-          data: result
+          data: filterProductFields(result)
         } as Resource]
       };
     } catch (error) {
@@ -433,12 +530,14 @@ server.tool(
   async ({ eventData }) => {
     try {
       const result = await eventsTools.sendEvent(eventData);
+      const filteredResult = filterEventFields(result);
+      
       return {
-        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        content: [{ type: "text", text: JSON.stringify(filteredResult, null, 2) }],
         resources: [{
           type: 'Event',
           id: result.eventID,
-          data: result
+          data: filterEventFields(result)
         } as Resource]
       };
     } catch (error) {
@@ -462,12 +561,19 @@ server.tool(
   async ({ limit, offset }) => {
     try {
       const result = await categoriesTools.listCategories({ limit, offset });
+      
+      // Create filtered response with only the defined fields
+      const filteredResult = {
+        categories: result.categories.map(filterCategoryFields),
+        paging: result.paging
+      };
+      
       return {
-        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        content: [{ type: "text", text: JSON.stringify(filteredResult, null, 2) }],
         resources: result.categories?.map(category => ({
           type: 'ProductCategory',
           id: category.categoryID,
-          data: category
+          data: filterCategoryFields(category)
         } as Resource)) || [],
         context: result.paging ? {
           pagination: {
@@ -497,12 +603,14 @@ server.tool(
   async ({ categoryData }) => {
     try {
       const result = await categoriesTools.createCategory(categoryData);
+      const filteredResult = filterCategoryFields(result);
+      
       return {
-        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        content: [{ type: "text", text: JSON.stringify(filteredResult, null, 2) }],
         resources: [{
           type: 'ProductCategory',
           id: result.categoryID,
-          data: result
+          data: filterCategoryFields(result)
         } as Resource]
       };
     } catch (error) {
@@ -524,12 +632,14 @@ server.tool(
   async ({ categoryId }) => {
     try {
       const result = await categoriesTools.getCategory(categoryId);
+      const filteredResult = filterCategoryFields(result);
+      
       return {
-        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        content: [{ type: "text", text: JSON.stringify(filteredResult, null, 2) }],
         resources: [{
           type: 'ProductCategory',
           id: result.categoryID,
-          data: result
+          data: filterCategoryFields(result)
         } as Resource]
       };
     } catch (error) {
@@ -552,12 +662,14 @@ server.tool(
   async ({ categoryId, categoryData }) => {
     try {
       const result = await categoriesTools.updateCategory(categoryId, categoryData);
+      const filteredResult = filterCategoryFields(result);
+      
       return {
-        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        content: [{ type: "text", text: JSON.stringify(filteredResult, null, 2) }],
         resources: [{
           type: 'ProductCategory',
           id: result.categoryID,
-          data: result
+          data: filterCategoryFields(result)
         } as Resource]
       };
     } catch (error) {
