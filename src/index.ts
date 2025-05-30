@@ -10,11 +10,12 @@ import {
   registerContactsTools, 
   registerProductsTools, 
   registerCategoriesTools, 
-  registerEventsTools 
+  registerEventsTools,
+  registerBrandsTools
 } from './tools/index.js';
 
 // Define the server version (hardcoded for simplicity)
-export const SERVER_VERSION = "2.2.0";
+export const SERVER_VERSION = "2.3.0";
 
 // Create MCP server
 const server = new McpServer(
@@ -31,6 +32,7 @@ registerContactsTools(server);
 registerProductsTools(server);
 registerCategoriesTools(server);
 registerEventsTools(server);
+registerBrandsTools(server);
 
 // Start receiving messages on stdin and sending messages on stdout
 const transport = new StdioServerTransport();

@@ -2,7 +2,7 @@
 
 A Model Context Protocol (MCP) server that integrates with Omnisend API V5, written in TypeScript.
 
-**Version:** 2.2.0
+**Version:** 2.3.0
 
 <a href="https://glama.ai/mcp/servers/@plutzilla/omnisend-mcp">
 <img width="380" src="https://glama.ai/mcp/servers/@plutzilla/omnisend-mcp/badge" alt="Omnisend Server MCP server" />
@@ -14,7 +14,22 @@ A Model Context Protocol (MCP) server that integrates with Omnisend API V5, writ
 - Product management (list, create, get, replace, delete)
 - Event tracking
 - Product categories management
+- Brand information access
 - Cursor-based pagination support with next/previous URLs and limit/offset information
+- MCP Inspector integration for debugging and testing
+- Human-readable resource names with proper JSON schema responses
+
+## Changes in Version 2.3.0
+
+- Added brand information support with `/v5/brands/current` endpoint integration
+- Implemented `getCurrentBrand` tool for retrieving current brand data
+- Added `Brand information` resource for live brand data access
+- Added `Brand schema` resource with proper JSON schema definition
+- Updated all schema resources to return serialized JSON instead of dummy text
+- Improved resource naming with human-readable names and "schema" suffix
+- Added MCP Inspector integration with `npm run inspect` and `npm run inspect:env` scripts
+- Enhanced debugging capabilities with visual testing interface
+- Updated documentation with comprehensive debugging and testing guide
 
 ## Changes in Version 2.2.0
 
@@ -65,6 +80,32 @@ For development with auto-reloading:
 ```bash
 npm run dev
 ```
+
+## Debugging and Testing
+
+### MCP Inspector
+
+The project includes scripts to run the MCP Inspector for testing and debugging:
+
+```bash
+# Basic inspector (requires .env file or environment variables)
+npm run inspect
+
+# Inspector with explicit environment variables
+OMNISEND_API_KEY=your_api_key npm run inspect:env
+```
+
+The MCP Inspector provides:
+- Interactive testing of all tools and resources
+- Real-time debugging of MCP communication
+- Visual interface for exploring server capabilities
+- Request/response logging and error analysis
+
+The inspector will open in your browser (typically at `http://localhost:6274`) and allow you to:
+- Test all available tools (ping, contacts, products, categories, events, brands)
+- Browse resources (schemas and live data)
+- Monitor server logs and notifications
+- Export configuration for use with other MCP clients
 
 ## Configuration
 

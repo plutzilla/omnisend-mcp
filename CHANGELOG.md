@@ -1,5 +1,38 @@
 # Omnisend MCP Server Changelog
 
+## 2.3.0 (2025-01-28)
+
+### New Features
+
+- **Brand Information Support**: Added complete integration with Omnisend `/v5/brands/current` endpoint
+  - New `getCurrentBrand` tool for retrieving current brand data
+  - New `Brand information` resource for live brand data access
+  - New `Brand schema` resource with proper JSON schema definition
+- **MCP Inspector Integration**: Added debugging and testing capabilities
+  - New `npm run inspect` script for basic inspector usage
+  - New `npm run inspect:env` script with explicit environment variable setup
+  - Visual testing interface for all tools and resources
+  - Real-time debugging of MCP communication
+
+### Improvements
+
+- **Enhanced Schema Resources**: All schema resources now return proper serialized JSON instead of dummy text
+  - Contact schema, Product schema, Product category schema, Event schema, Brand schema
+  - Proper `application/json` MIME type for all schema responses
+- **Human-Readable Resource Names**: Improved resource naming convention
+  - Added "schema" suffix to all schema resources for clarity
+  - Renamed `brand://current` resource to "Brand information"
+- **Enhanced Documentation**: Comprehensive debugging and testing guide added to README
+  - Detailed MCP Inspector usage instructions
+  - Updated features list and version information
+
+### Technical Improvements
+
+- Consistent error handling across all brand-related functionality
+- Proper TypeScript typing for brand interfaces and responses
+- Modular architecture maintained with new brand domain
+- Enhanced filtering for brand data responses
+
 ## 2.2.0 (2025-05-10)
 
 ### Improvements

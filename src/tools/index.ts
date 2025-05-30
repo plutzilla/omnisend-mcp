@@ -1,6 +1,7 @@
 // Re-export all tools
-export * from './shared/ping.js';
-export * from './contacts/index.js';
-export * from './products/index.js';
-export * from './categories/index.js';
-export * from './events/index.js'; 
+export { registerPingTool } from './shared/ping.js';
+export { registerContactsTools } from './contacts/index.js';
+export { registerProductsTools } from './products/index.js';
+export { registerCategoriesTools } from './categories/index.js';
+export { registerEventsTools } from './events/index.js';
+export { registerBrandsTools } from './brands/index.js'; 
